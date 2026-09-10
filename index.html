@@ -111,9 +111,10 @@ a{color:var(--blue)}
 #fg .fback{position:absolute;left:10px;top:calc(12px + env(safe-area-inset-top));width:34px;height:34px;
  border-radius:50%;background:#1a2233;color:#e8edf6;border:1px solid #2c3852;font-size:22px;line-height:30px}
 #fg .ftt{text-align:center;font-weight:700;font-size:17px;padding:6px 40px}
-#fg .ftabs{display:flex;gap:6px;padding:10px 0}
-#fg .ftab{flex:1;text-align:center;padding:9px 2px;border-radius:10px;background:#1a2233;color:#9fb0c8;
- font-size:13px;font-weight:600;border:1px solid #2c3852}
+#fg .ftabs{display:flex;gap:6px;padding:10px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+#fg .ftabs::-webkit-scrollbar{display:none}
+#fg .ftab{flex:0 0 auto;text-align:center;padding:9px 12px;border-radius:10px;background:#1a2233;color:#9fb0c8;
+ font-size:13px;font-weight:600;border:1px solid #2c3852;white-space:nowrap}
 #fg .ftab.on{background:#4f9cff;color:#fff;border-color:#4f9cff}
 #fg .fbody{padding:14px}
 #fg .fpg{display:none}#fg .fpg.on{display:block}
@@ -152,6 +153,14 @@ a{color:var(--blue)}
 #fg .dg .face{background:#202a3f;font-weight:700;color:#4f9cff}
 #fg .dg>div:nth-last-child(-n+2){border-bottom:none}
 #fg ul.tight{margin:6px 0;padding-left:20px;font-size:14px}#fg ul.tight li{margin-bottom:6px}
+#fg .burrow{display:flex;gap:12px;align-items:center;padding:10px 2px;border-bottom:1px solid #2c3852}
+#fg .burrow:last-child{border-bottom:none}
+#fg .burrow svg{flex:0 0 34px;width:34px;height:78px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+#fg .binfo{flex:1;min-width:0}
+#fg .bmodel{font-size:16px;font-weight:700;color:#f5b942;margin-bottom:2px}
+#fg .bdesc{font-size:13px;color:#c6d2e4;line-height:1.45}
+#fg .bgrit{font-size:11px;font-weight:700;color:#fff;background:#e05252;border-radius:6px;padding:1px 6px;margin-left:5px;vertical-align:1px}
+#fg .burrow.fine .bmodel{color:#ff9a9a}
 #fg .sub{font-size:13.5px;font-weight:700;color:#9fb0c8;margin:12px 0 6px}
 #fg .hblk{background:#1a2233;border:1px solid #2c3852;border-radius:14px;padding:0;margin-bottom:12px;overflow:hidden}
 #fg .hblk summary{padding:13px 14px;font-weight:700;font-size:15px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
@@ -199,7 +208,7 @@ function viewHome(){
     <button class="bigbtn b4" onclick="viewAbout()">ℹ️ 答题策略与说明</button>
   </div>
   <div class="card">
-    <button class="bigbtn b1" onclick="fgOpen('card')">🦷 技能评分细则速记卡<span class="d">模块一II类洞 · 模块二全瓷冠 · Fair Grader设备分</span></button>
+    <button class="bigbtn b1" onclick="fgOpen('card')">🦷 技能评分细则速记卡<span class="d">模块一II类洞 · 模块二全瓷冠 · 车针图册 · Fair Grader设备分</span></button>
     <button class="bigbtn b2" onclick="fgOpen('hum')">🤝 人文沟通题眼速查<span class="d">模块四五常考：知情同意/伦理/法规/感控宣教</span></button>
   </div>
   <div class="muted" style="text-align:center">进度自动保存在本机；建议用Safari“添加到主屏幕”</div>`;
@@ -465,6 +474,7 @@ function fgEnsure(){
    <div class="ftabs">
      <div class="ftab" data-fp="fm1">模块一 II类洞</div>
      <div class="ftab" data-fp="fm2">模块二 全瓷冠</div>
+     <div class="ftab" data-fp="fbur">车针图册</div>
      <div class="ftab" data-fp="feq">设备说明</div>
      <div class="ftab" data-fp="fhum">人文题眼</div>
    </div>
@@ -609,6 +619,84 @@ function fgEnsure(){
    </div>
   </div>
 
+  <!-- 车针图册 -->
+  <div class="fpg" id="fbur">
+   <div class="note" style="margin:0 0 12px">赛场<b>统一提供</b>竞赛专用车针；下列为<b>自备训练</b>用，按同品牌同型号购买以保持手感。形状为按 MANI 国际命名规则绘制的示意图，<b>实际外形/砂号以原厂产品为准</b>。</div>
+
+   <div class="sec">
+     <h3>模块一 · II类洞（26）<span class="tg p">3支</span></h3>
+     <div class="burrow">
+       <svg viewBox="0 0 40 92"><rect x="16" y="2" width="8" height="40" rx="1.5" fill="#8a97ab"/><circle cx="20" cy="62" r="15" fill="#d8b25a" stroke="#caa04a"/></svg>
+       <div class="binfo"><div class="bmodel">大白鲨 RA-3#</div><div class="bdesc">低速弯机用 · 球钻类，开扩/去腐点磨</div></div>
+     </div>
+     <div class="burrow">
+       <svg viewBox="0 0 40 92"><rect x="16" y="2" width="8" height="40" rx="1.5" fill="#8a97ab"/><path d="M13 42 L27 42 L24 70 L16 70 Z" fill="#d8b25a" stroke="#caa04a"/></svg>
+       <div class="binfo"><div class="bmodel">大白鲨 RA-35#</div><div class="bdesc">低速弯机用 · 锥/倒锥形，修整洞壁轴壁</div></div>
+     </div>
+     <div class="burrow">
+       <svg viewBox="0 0 40 92"><rect x="17" y="2" width="6" height="24" fill="#8a97ab"/><rect x="13.5" y="26" width="13" height="54" rx="1" fill="#aeb9c8" stroke="#7f8b9c"/><line x1="17" y1="30" x2="17" y2="76" stroke="#6c7886" stroke-width="1.2"/><line x1="20" y1="30" x2="20" y2="76" stroke="#6c7886" stroke-width="1.2"/><line x1="23" y1="30" x2="23" y2="76" stroke="#6c7886" stroke-width="1.2"/></svg>
+       <div class="binfo"><div class="bmodel">MANI 557</div><div class="bdesc">高速<b>裂钻</b>（直柱平头、带刃沟）· 主要切削成形、开洞扩洞</div></div>
+     </div>
+   </div>
+
+   <div class="sec">
+     <h3>模块二 · 全瓷冠 · 前牙11/21 <span class="tg p">7支</span></h3>
+     <div class="burrow">
+       <svg viewBox="0 0 40 92"><rect x="17" y="2" width="6" height="24" fill="#8a97ab"/><path d="M15 26 L25 26 L28 80 L12 80 Z" fill="#d8b25a" stroke="#caa04a"/></svg>
+       <div class="binfo"><div class="bmodel">TF-13</div><div class="bdesc">锥形·<b>平头</b>（Taper Flat）· 轴面/引导沟，前后牙通用</div></div>
+     </div>
+     <div class="burrow">
+       <svg viewBox="0 0 40 92"><rect x="17" y="2" width="6" height="24" fill="#8a97ab"/><path d="M15 26 L25 26 L27 68 Q27 80 20 80 Q13 80 13 68 Z" fill="#d8b25a" stroke="#caa04a"/></svg>
+       <div class="binfo"><div class="bmodel">TR-13</div><div class="bdesc">锥形·<b>圆头</b>（Taper Round）· 轴面预备，前后牙通用</div></div>
+     </div>
+     <div class="burrow">
+       <svg viewBox="0 0 40 92"><rect x="17.5" y="2" width="5" height="24" fill="#8a97ab"/><path d="M16.5 26 L23.5 26 L25 66 Q25 77 20 77 Q15 77 15 66 Z" fill="#d8b25a" stroke="#caa04a"/></svg>
+       <div class="binfo"><div class="bmodel">TR-11</div><div class="bdesc">锥形圆头·<b>小号</b> · 精细轴面，前后牙通用</div></div>
+     </div>
+     <div class="burrow">
+       <svg viewBox="0 0 40 92"><rect x="17" y="2" width="6" height="24" fill="#8a97ab"/><circle cx="20" cy="56" r="16" fill="#d8b25a" stroke="#caa04a"/></svg>
+       <div class="binfo"><div class="bmodel">BR-31</div><div class="bdesc">球形（Ball Round）<b>球钻</b> · 前牙专用，舌面窝/定深</div></div>
+     </div>
+     <div class="burrow">
+       <svg viewBox="0 0 40 92"><rect x="17" y="2" width="6" height="24" fill="#8a97ab"/><path d="M20 26 C29 42 29 64 20 80 C11 64 11 42 20 26 Z" fill="#d8b25a" stroke="#caa04a"/></svg>
+       <div class="binfo"><div class="bmodel">FO-25</div><div class="bdesc">火焰形·尖圆头（Flame Ogival）· 前牙专用，唇舌面/邻面修形</div></div>
+     </div>
+     <div class="burrow fine">
+       <svg viewBox="0 0 40 92"><rect x="17" y="2" width="6" height="24" fill="#8a97ab"/><rect x="17" y="22" width="6" height="4" fill="#e05252"/><path d="M16 26 L24 24 L26 66 Q26 77 20 77 Q14 77 14 66 Z" fill="#d8b25a" stroke="#caa04a"/></svg>
+       <div class="binfo"><div class="bmodel">TR-13F <span class="bgrit">细砂F</span></div><div class="bdesc">锥形圆头·<b>细齿精修</b> · 轴面精修抛光，前后牙通用</div></div>
+     </div>
+     <div class="burrow fine">
+       <svg viewBox="0 0 40 92"><rect x="17" y="2" width="6" height="24" fill="#8a97ab"/><rect x="17" y="22" width="6" height="4" fill="#e05252"/><path d="M14 26 L26 26 L27 60 Q27 72 20 72 Q13 72 13 60 Z" fill="#d8b25a" stroke="#caa04a"/></svg>
+       <div class="binfo"><div class="bmodel">CE-15F <span class="bgrit">细砂F</span></div><div class="bdesc">短粗圆头（肩台型）· <b>前牙肩台精修</b>专用</div></div>
+     </div>
+   </div>
+
+   <div class="sec">
+     <h3>模块二 · 全瓷冠 · 后牙16/26/36/46 <span class="tg p">后牙另加2支</span></h3>
+     <div class="burrow">
+       <svg viewBox="0 0 40 92"><rect x="17" y="2" width="6" height="24" fill="#8a97ab"/><path d="M14 26 L26 26 L30 80 L10 80 Z" fill="#d8b25a" stroke="#caa04a"/></svg>
+       <div class="binfo"><div class="bmodel">TF-22</div><div class="bdesc">锥形平头·<b>大号</b>（比TF-13宽长）· 后牙专用，合面/轴面大量备牙</div></div>
+     </div>
+     <div class="burrow fine">
+       <svg viewBox="0 0 40 92"><rect x="17" y="2" width="6" height="24" fill="#8a97ab"/><rect x="17" y="22" width="6" height="4" fill="#e05252"/><path d="M17 26 L23 24 L25 70 Q25 80 20 80 Q15 80 15 70 Z" fill="#d8b25a" stroke="#caa04a"/></svg>
+       <div class="binfo"><div class="bmodel">EX-18F <span class="bgrit">细砂F</span></div><div class="bdesc">特殊形（Extra）· <b>后牙细齿精修</b>专用，肩台/轴面抛光</div></div>
+     </div>
+     <div class="note gold" style="margin-top:10px">后牙通用的 <b>TF-13 / TR-13 / TR-11 / TR-13F</b> 已含在前牙7支里——<b>全模块二实际备齐 9 支 MANI</b>：TF-13、TR-13、TR-11、TR-13F（通用）＋ BR-31、FO-25、CE-15F（前牙专用）＋ TF-22、EX-18F（后牙专用）。</div>
+   </div>
+
+   <div class="sec">
+     <h3>型号怎么看（采购防买错）</h3>
+     <ul class="tight">
+      <li><b>前缀字母</b>＝工作头形状：TF 锥形平头 · TR 锥形圆头 · BR 球形 · FO 火焰形 · CE 肩台/CEREC型 · EX 特殊形。</li>
+      <li><b>数字</b>＝尺寸号，越大工作头越大（TF-13 中号 → TF-22 大号）。</li>
+      <li><b>后缀 F</b>＝<span style="color:#ff8a8a;font-weight:700">细砂/细齿精修车针（多为红环）</span>，用于最后精修抛光，不能拿来粗磨。</li>
+      <li><b>RA</b>＝低速弯机夹持柄（大白鲨 RA-3#/RA-35#）；MANI 冠车针为 <b>FG 高速</b>短柄；557 为高速裂钻。</li>
+      <li>金钢砂车针砂号色环：⚫超粗 🟢粗 🔵标准 🔴细(=F) 🟡极细；粗磨用蓝/绿，精修用红。</li>
+      <li>建议按 <b>3～5 套</b>备货，车针属消耗品；购买认准 <b>MANI 马尼正品</b>与大白鲨正规渠道。</li>
+     </ul>
+   </div>
+  </div>
+
   <!-- 设备 -->
   <div class="fpg" id="feq">
    <div class="sec">
@@ -707,7 +795,7 @@ function fgEnsure(){
  document.body.appendChild(d);
  d.querySelectorAll(".ftab").forEach(t=>t.onclick=()=>fgTab(t.dataset.fp));
 }
-function fgOpen(p){fgEnsure();const fg=document.getElementById("fg");fg.classList.add("on");fgTab(p);}
+function fgOpen(p){fgEnsure();const alias={card:"fm1",bur:"fbur",hum:"fhum",eq:"feq"};p=alias[p]||p;const fg=document.getElementById("fg");fg.classList.add("on");fgTab(p);}
 function fgClose(){document.getElementById("fg").classList.remove("on");}
 function fgTab(p){
  document.querySelectorAll("#fg .ftab").forEach(t=>t.classList.toggle("on",t.dataset.fp===p));
