@@ -10,7 +10,25 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
-:root{--blue:#1f6f8b;--blue2:#2b8da8;--bg:#eef3f5;--card:#fff;--ok:#1a9d6b;--bad:#d64545;--warn:#e08a1e;--ink:#1d2b2f;--sub:#6a7d82;--line:#dbe6e9}
+:root{--blue:#1f6f8b;--blue2:#2b8da8;--bg:#eef3f5;--card:#fff;--ok:#1a9d6b;--bad:#d64545;--warn:#e08a1e;--ink:#1d2b2f;--sub:#6a7d82;--line:#dbe6e9;--gold:#b8860b}
+/* 背题题目导航 */
+.navgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin:10px 0 4px}
+.ncell{aspect-ratio:1;border-radius:9px;border:1.5px solid var(--line);background:#fff;color:var(--ink);
+ font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;position:relative;padding:0}
+.ncell.done{background:#e4f6ee;border-color:var(--ok);color:var(--ok)}
+.ncell.review{background:#fdeaea;border-color:var(--bad);color:var(--bad)}
+.ncell.cur{outline:3px solid rgba(31,111,139,.35);border-color:var(--blue)}
+.ncell:disabled{opacity:.55}
+.navlegend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--sub);margin:4px 0 2px}
+.navlegend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.navlegend .ld{background:#e4f6ee;border:1px solid var(--ok)}
+.navlegend .lr{background:#fdeaea;border:1px solid var(--bad)}
+.navlegend .ln{background:#fff;border:1px solid var(--line)}
+.casejump{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.casejump button{font-size:13px;padding:7px 11px;border-radius:20px;border:1px solid var(--line);background:#fff;color:var(--blue);font-weight:600}
+.jumplink{width:100%;margin-top:10px;background:var(--bg);border:1px dashed var(--blue2);color:var(--blue);
+ border-radius:10px;padding:9px;font-size:14px;font-weight:700}
+.prevbtn{background:#fff;color:var(--blue);border:1.5px solid var(--blue2);margin-bottom:9px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.55;padding-bottom:env(safe-area-inset-bottom)}
@@ -19,6 +37,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .hd .back{background:rgba(255,255,255,.18);border:none;color:#fff;width:34px;height:34px;border-radius:10px;font-size:18px;flex:0 0 auto}
 .hd .tt{font-weight:700;font-size:17px;flex:1;line-height:1.25}
 .hd .timer{font-variant-numeric:tabular-nums;background:rgba(0,0,0,.25);padding:5px 10px;border-radius:9px;font-weight:700}
+.hdnav{background:rgba(255,255,255,.18);border:none;color:#fff;padding:6px 12px;border-radius:9px;font-size:13.5px;font-weight:700;flex:0 0 auto}
 .card{background:var(--card);border-radius:14px;padding:14px 15px;margin-bottom:12px;box-shadow:0 1px 3px rgba(20,60,70,.06)}
 .home-title{text-align:center;margin:8px 0 4px;font-size:22px;font-weight:800;color:var(--blue)}
 .home-sub{text-align:center;color:var(--sub);font-size:13px;margin-bottom:16px}
@@ -198,23 +217,47 @@ function pickSet(i){if(pendingMode==="study")startStudy(i,true);else startExam(i
 
 /* ---------------- 背题模式 ---------------- */
 let study=null;
+function studyKey(si){return "jz_study_"+si;}
+function loadStudyState(si,n){
+ const s=store.get(studyKey(si),null);
+ if(s&&Array.isArray(s.picked)){
+   return {picked:s.picked.slice(0,n),revealed:(s.revealed||[]).slice(0,n)};
+ }
+ return {picked:[],revealed:[]};
+}
+function saveStudyState(){
+ store.set(studyKey(study.si),{picked:study.picked,revealed:study.revealed});
+ store.set(LS_P,{mode:"study",si:study.si,idx:study.idx});
+}
 function startStudy(si,resume){
  const items=flatten(si);
+ const st=loadStudyState(si,items.length);
  let idx=0;
- if(resume){const p=store.get(LS_P,{});if(p.mode==="study"&&p.si===si)idx=Math.min(p.idx||0,items.length-1);}
- study={si,items,idx,picked:[],revealed:store.get("jz_dummy",{})};
+ if(resume){
+   let firstUndone=st.revealed.findIndex(v=>!v);
+   idx=firstUndone>=0?firstUndone:items.length-1;   // 接着第一道没做的，做过的自动跳过
+ }
+ study={si,items,idx,picked:st.picked,revealed:st.revealed,navOpen:false};
  renderStudy();
 }
+function restartStudy(si){
+ store.set(studyKey(si),null);
+ startStudy(si,false);
+}
+function qStatus(i){
+ if(!study.revealed[i])return 0;                 // 未做
+ const r=scoreQ(study.items[i].q,study.picked[i]||[]);
+ return r.gain===r.max?1:2;                      // 1已掌握 2需复习
+}
 function toggleOpt(L){
- const it=study.items[study.idx];
- const cur=study.picked[study.idx]||[];
+ const cur=study.picked[study.idx]?study.picked[study.idx].slice():[];
  const i=cur.indexOf(L);
  if(i>=0)cur.splice(i,1);else cur.push(L);
- study.picked[study.idx]=cur;
+ study.picked[study.idx]=cur;saveStudyState();
  renderStudy();
 }
 function reveal(){
- study.items[study.idx].revealed=true;
+ study.revealed[study.idx]=true;
  const it=study.items[study.idx],picked=study.picked[study.idx]||[];
  const r=scoreQ(it.q,picked);
  // 错题本：非满分即收录；满分则移出
@@ -222,11 +265,14 @@ function reveal(){
  const id=keyOf(it);
  if(r.gain<r.max){if(!w.includes(id))w.push(id);}else{w=w.filter(x=>x!==id);}
  store.set(LS_W,w);
+ saveStudyState();
  renderStudy();
 }
-function nextQ(){if(study.idx<study.items.length-1){study.idx++;store.set(LS_P,{mode:"study",si:study.si,idx:study.idx});renderStudy();}else viewStudyDone();}
+function gotoQ(i){study.idx=i;saveStudyState();renderStudy();}
+function prevQ(){if(study.idx>0)gotoQ(study.idx-1);}
+function nextQ(){if(study.idx<study.items.length-1)gotoQ(study.idx+1);else viewStudyDone();}
 function renderStudy(){
- const it=study.items[study.idx],q=it.q,picked=study.picked[study.idx]||[],rev=!!it.revealed;
+ const it=study.items[study.idx],q=it.q,picked=study.picked[study.idx]||[],rev=!!study.revealed[study.idx];
  const A=q.ans.split("");
  const firstInCase=study.idx===0||study.items[study.idx-1].ci!==it.ci;
  const opts=q.opts.map((o,i)=>{const L=LETTERS[i];let cls="opt";
@@ -241,7 +287,28 @@ function renderStudy(){
             <div class="exp"><b>解析：</b>${q.exp}</div>`;
  }
  const isLast=study.idx===study.items.length-1;
- $app.innerHTML=header(`背题 · 第${study.si+1}套 (${study.idx+1}/${study.items.length})`,"","home")
+ const N=study.items.length;
+ let done=0,revN=0;for(let i=0;i<N;i++){if(study.revealed[i]){revN++;if(qStatus(i)===1)done++;}}
+ const cells=study.items.map((x,i)=>{const st=qStatus(i);
+   const cls="ncell "+(st===1?"done":st===2?"review":"")+(i===study.idx?" cur":"");
+   const mark=st===1?"✓":st===2?"↻":(i+1);
+   return `<button class="${cls}" onclick="gotoQ(${i})" title="第${i+1}题">${mark}</button>`;}).join("");
+ const navExtra=`<button class="hdnav" onclick="toggleStudyNav()" id="navBtn">题号 ▾</button>`;
+ let navCard="";
+ if(study.navOpen){
+   const groups=[];
+   study.items.forEach((x,i)=>{if(i===0||study.items[i-1].ci!==x.ci)groups.push({ci:x.ci,subj:x.c.subj,diag:x.c.diag,start:i});});
+   navCard=`<div class="card" id="navCard">
+     <div style="display:flex;justify-content:space-between;align-items:center">
+       <b style="font-size:15px">选题号 · 直接跳做</b>
+       <span style="font-size:12.5px;color:var(--sub)">已掌握 ${done} / 做过 ${revN} / 共 ${N}</span></div>
+     <div class="navlegend"><span><i class="ld"></i>已掌握</span><span><i class="lr"></i>需复习</span><span><i class="ln"></i>未做</span></div>
+     <div class="navgrid">${cells}</div>
+     <div class="casejump">${groups.map(g=>`<button onclick="gotoQ(${g.start})">${g.subj.replace('病学','').replace('口腔','')}·${g.diag.length>9?g.diag.slice(0,9)+'…':g.diag}</button>`).join("")}</div>
+   </div>`;
+ }
+ $app.innerHTML=header(`背题 · 第${study.si+1}套 (${study.idx+1}/${N})`,navExtra,"home")
+  +navCard
   +caseBlock(it.c,firstInCase)
   +`<div class="card">
       <span class="qtag">${q.tag}</span>
@@ -250,9 +317,13 @@ function renderStudy(){
       <div class="footspace"></div>
       ${rev?`<button class="btn ${isLast?"btn-ok":"btn-pri"}" onclick="nextQ()">${isLast?"完成本套，看小结":"下一题 ›"}</button>`
             :`<button class="btn btn-pri" ${picked.length?"":"disabled"} onclick="reveal()">确认答案</button>`}
+      ${study.idx>0?`<button class="btn prevbtn" onclick="prevQ()">‹ 上一题</button>`:""}
+      <button class="btn jumplink" onclick="toggleStudyNav()">📋 题号导航：挑题做 / 跳过已会的</button>
     </div>`;
  window.scrollTo(0,0);
 }
+function toggleStudyNav(){study.navOpen=!study.navOpen;renderStudy();
+ if(study.navOpen){requestAnimationFrame(()=>{const el=document.getElementById("navCard");if(el)el.scrollIntoView({behavior:"smooth",block:"start"});});}}
 function viewStudyDone(){
  const items=study.items;let gain=0,max=0,perfect=0;
  items.forEach((it,i)=>{const p=study.picked[i]||[];const r=scoreQ(it.q,p);gain+=r.gain;max+=r.max;if(r.gain===r.max)perfect++;});
@@ -262,7 +333,7 @@ function viewStudyDone(){
    <div class="stat"><div class="n">${items.length-perfect}</div><div class="t">需复习</div></div>
    <div class="stat"><div class="n">${store.get(LS_W,[]).length}</div><div class="t">错题本</div></div></div></div>
    <button class="btn btn-pri" onclick="viewHome()">返回首页</button>
-   <div style="height:10px"></div><button class="btn btn-ghost" onclick="startStudy(${study.si},false)">重新刷本套</button>`;
+   <div style="height:10px"></div><button class="btn btn-ghost" onclick="restartStudy(${study.si})">重新刷本套（清空记录）</button>`;
 }
 
 /* ---------------- 模拟考 ---------------- */
