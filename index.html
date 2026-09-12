@@ -44,6 +44,19 @@
 .mapstem{font-size:14.5px;line-height:1.4;color:var(--ink);
  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .mapgo{flex:0 0 auto;color:var(--blue2);font-size:18px;align-self:center}
+/* 科目菜单 */
+.subjcard{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);
+ border-radius:13px;padding:13px 14px;margin-bottom:10px;cursor:pointer}
+.subjcard:active{background:#f3f8fa}
+.sj-ico{font-size:24px;flex:0 0 auto}
+.sj-body{flex:1;min-width:0;display:flex;flex-direction:column}
+.sj-body b{font-size:16px;color:var(--ink)}
+.sj-meta{font-size:12.5px;color:var(--sub);margin-top:2px}
+/* 地图筛选 */
+.filterbar{display:flex;gap:7px;flex-wrap:wrap}
+.filterchip{border:1.5px solid var(--line);background:#fff;color:var(--sub);border-radius:20px;
+ padding:7px 14px;font-size:13.5px;font-weight:700}
+.filterchip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
 .qnavrow{display:flex;gap:8px;margin-top:9px}
 .qnavrow>button{flex:1;background:#fff;color:var(--blue);border:1.5px solid var(--blue2);border-radius:10px;padding:10px 4px;font-size:13.5px;font-weight:700}
 .qnavrow .mapbtn{background:var(--blue);color:#fff;border-color:var(--blue)}
@@ -250,7 +263,7 @@ function viewHome(){
     <button class="bigbtn b4" onclick="viewAbout()">ℹ️ 答题策略与说明</button>
   </div>
   <div class="card" style="border:2px solid var(--gold);background:#fffaf0">
-    <button class="bigbtn" style="background:linear-gradient(135deg,#d99a17,#f5b942);color:#fff" onclick="startStudy(5)">🎯 弱项专题特训（修复·口外·人文）<span class="d" style="color:#fff4dd">专题1·高难36题：桩核冠/RPD/间隙感染/拔牙全身评估/人文法规，点此直接进题目地图</span></button>
+    <button class="bigbtn" style="background:linear-gradient(135deg,#d99a17,#f5b942);color:#fff" onclick="viewSubjects()">🎯 按科目专项训练<span class="d" style="color:#fff4dd">口内/牙周/黏膜/口外/口修/人文法规，聚合全部题；可只筛未做、需复习</span></button>
   </div>
   <div class="card">
     <button class="bigbtn b1" onclick="fgOpen('card')">🦷 技能评分细则速记卡<span class="d">模块一II类洞 · 模块二全瓷冠 · 车针图册 · Fair Grader设备分</span></button>
@@ -271,53 +284,118 @@ function pickSet(i){if(pendingMode==="study")startStudy(i);else startExam(i);}
 
 /* ---------------- 背题模式 ---------------- */
 let study=null;
-function studyKey(si){return "jz_study_"+si;}
-function loadStudyState(si,n){
- const s=store.get(studyKey(si),null);
+function studyStorageKey(){return study.scope==="subj"?("jz_subj_"+study.subjKey):("jz_study_"+study.si);}
+function loadStudyState(key,n){
+ const s=store.get(key,null);
  if(s&&Array.isArray(s.picked)){
    return {picked:s.picked.slice(0,n),revealed:(s.revealed||[]).slice(0,n)};
  }
  return {picked:[],revealed:[]};
 }
 function saveStudyState(){
- store.set(studyKey(study.si),{picked:study.picked,revealed:study.revealed});
- store.set(LS_P,{mode:"study",si:study.si,idx:study.idx});
+ store.set(studyStorageKey(),{picked:study.picked,revealed:study.revealed});
+ store.set(LS_P,{mode:"study",scope:study.scope,si:study.si,subjKey:study.subjKey,idx:study.idx});
 }
 function startStudy(si){
  const items=flatten(si);
- const st=loadStudyState(si,items.length);
- study={si,items,idx:0,picked:st.picked,revealed:st.revealed,navOpen:false};
+ const st=loadStudyState("jz_study_"+si,items.length);
+ study={scope:"set",si,subjKey:null,items,idx:0,picked:st.picked,revealed:st.revealed,navOpen:false,mapFilter:"all"};
  viewStudyMap();
 }
-function restartStudy(si){
- store.set(studyKey(si),null);
- startStudy(si);
+function restartScope(){
+ store.set(studyStorageKey(),null);
+ if(study.scope==="subj")startSubject(study.subjKey);else startStudy(study.si);
 }
-/* 题目地图：列出全部题，任意点跳，不必按顺序 */
+/* ============ 按科目专项训练 ============ */
+const SUBJECTS=[
+ {key:"kounei",name:"口内（牙体牙髓）",icon:"🪥"},
+ {key:"yazhou",name:"牙周病",icon:"🦷"},
+ {key:"nianmo",name:"口腔黏膜",icon:"👅"},
+ {key:"kouwai",name:"口外（含儿牙）",icon:"🪓"},
+ {key:"kouxiu",name:"口腔修复",icon:"🔧"},
+ {key:"renwen",name:"人文·法规·院感",icon:"🤝"},
+];
+function subjMatch(key,c){
+ const t=(c.cat+" "+c.subj);
+ if(key==="kounei")return /牙体|牙髓|口内/.test(t);
+ if(key==="yazhou")return /牙周/.test(t);
+ if(key==="nianmo")return /黏膜/.test(t);
+ if(key==="kouwai")return /外科|口外|儿童|儿牙/.test(t);
+ if(key==="kouxiu")return /修复/.test(t);
+ if(key==="renwen")return /人文|法规|伦理|医患/.test(t);
+ return false;
+}
+function flattenSubject(key){
+ const items=[];
+ DATA.forEach((set,si)=>set.cases.forEach((c,ci)=>{
+   if(subjMatch(key,c))c.qs.forEach((q,qi)=>items.push({si,ci,qi,q,c}));
+ }));
+ return items;
+}
+function startSubject(key){
+ const items=flattenSubject(key);
+ if(!items.length){alert("该科目暂无题目");viewSubjects();return;}
+ const st=loadStudyState("jz_subj_"+key,items.length);
+ const name=(SUBJECTS.find(s=>s.key===key)||{}).name||key;
+ study={scope:"subj",si:-1,subjKey:key,subjName:name,items,idx:0,picked:st.picked,revealed:st.revealed,navOpen:false,mapFilter:"all"};
+ viewStudyMap();
+}
+function viewSubjects(){
+ const cards=SUBJECTS.map(s=>{
+   const items=flattenSubject(s.key);
+   let done=0,rev=0;
+   const st=store.get("jz_subj_"+s.key,null);
+   if(st&&Array.isArray(st.revealed)){st.revealed.forEach((v,i)=>{if(v&&items[i]){rev++;const r=scoreQ(items[i].q,st.picked[i]||[]);if(r.gain===r.max)done++;}});}
+   return `<button class="subjcard" onclick="startSubject('${s.key}')">
+     <span class="sj-ico">${s.icon}</span>
+     <span class="sj-body"><b>${s.name}</b><span class="sj-meta">共 ${items.length} 题 · 已掌握 ${done} · 未做 ${items.length-rev}</span></span>
+     <span class="mapgo">›</span></button>`;
+ }).join("");
+ $app.innerHTML=header("🎯 按科目专项训练")+
+  `<div class="card" style="font-size:13.5px;color:var(--sub)">聚合全部套卷与专题，按科目刷题；点进科目后可在题目地图里筛选<b>未做/需复习</b>。</div>
+   <div class="card">${cards}</div>`;
+ window.scrollTo(0,0);
+}
+function setMapFilter(f){study.mapFilter=f;viewStudyMap();}
+/* 题目地图：列出全部题，任意点跳，可按状态筛选 */
 function viewStudyMap(){
  const N=study.items.length;let done=0,rev=0;
  for(let i=0;i<N;i++){if(study.revealed[i]){rev++;if(qStatus(i)===1)done++;}}
- let first=study.revealed.findIndex(v=>!v);if(first<0)first=0;
- const setname=(DATA[study.si].name||("第"+(study.si+1)+"套")).split("·")[0];
+ const title=study.scope==="subj"?study.subjName:(DATA[study.si].name||("第"+(study.si+1)+"套")).split("·")[0];
+ const back=study.scope==="subj"?"subjects":"home";
+ const f=study.mapFilter||"all";
+ const vis=i=>f==="all"||(f==="undone"&&qStatus(i)===0)||(f==="review"&&qStatus(i)===2)||(f==="done"&&qStatus(i)===1);
+ let first=study.items.findIndex((_,i)=>vis(i));if(first<0)first=0;
+ // 跨套按 真实(si,ci) 分组
  const groups=[];
- study.items.forEach((x,i)=>{if(i===0||study.items[i-1].ci!==x.ci)groups.push({ci:x.ci,subj:x.c.subj,diag:x.c.diag,start:i,end:i});else groups[groups.length-1].end=i;});
- let html=header("题目地图 · "+setname,"","home")
+ study.items.forEach((x,i)=>{
+   const g=groups[groups.length-1];
+   if(!g||g.si!==x.si||g.ci!==x.ci)groups.push({si:x.si,ci:x.ci,subj:x.c.subj,diag:x.c.diag,idxs:[i]});
+   else g.idxs.push(i);
+ });
+ const flt=(key,label,count)=>`<button class="filterchip ${f===key?"on":""}" onclick="setMapFilter('${key}')">${label}${count!=null?" "+count:""}</button>`;
+ let html=header("题目地图 · "+title,"",back)
   +`<div class="card" style="font-size:13.5px;color:var(--sub)">
-      <div style="color:var(--ink);font-size:14.5px;margin-bottom:6px">点任意一题直接做，<b>不用按顺序、没做也能跳</b>；做完自动记录 ✓/↻。</div>
-      <div class="navlegend" style="margin:6px 0"><span><i class="ld"></i>已掌握 ${done}</span><span><i class="lr"></i>需复习 ${rev-done}</span><span><i class="ln"></i>未做 ${N-rev}</span></div>
-      <button class="btn btn-pri" onclick="gotoQ(${first})">▶ 从${study.revealed[first]?'最后一题':'第'+(first+1)+'题'}顺序做</button>
+      <div style="color:var(--ink);font-size:14.5px;margin-bottom:8px">点任意一题直接做，<b>不用按顺序</b>；点下面筛选只看某一类。</div>
+      <div class="filterbar">
+        ${flt("all","全部",N)}${flt("undone","未做",N-rev)}${flt("review","需复习",rev-done)}${flt("done","已掌握",done)}
+      </div>
+      <button class="btn btn-pri" style="margin-top:9px" onclick="gotoQ(${first})">▶ ${f==="undone"&&N-rev?"从第一道未做题开始":"从当前第"+(first+1)+"题顺序做"}</button>
     </div>`;
  groups.forEach(g=>{
+   const idxs=g.idxs.filter(vis);
+   if(!idxs.length)return;
    html+=`<div class="mapcase">${g.subj}<span class="mc-diag">${g.diag}</span></div>`;
-   for(let i=g.start;i<=g.end;i++){
+   idxs.forEach(i=>{
      const x=study.items[i],stt=qStatus(i);
      const dot=stt===1?"✓":stt===2?"↻":(i+1);
      html+=`<button class="mapitem ${stt===1?"done":stt===2?"review":""}" onclick="gotoQ(${i})">
        <span class="mapdot">${dot}</span>
        <span class="mapbody"><span class="maptag">${x.q.tag}</span><span class="mapstem">${x.q.stem}</span></span>
        <span class="mapgo">›</span></button>`;
-   }
+   });
  });
+ if(f!=="all"&&!groups.some(g=>g.idxs.some(vis)))html+=`<div class="card empty">这一类暂时没有题 🎉</div>`;
  $app.innerHTML=html;window.scrollTo(0,0);
 }
 function qStatus(i){
@@ -407,13 +485,13 @@ function toggleStudyNav(){study.navOpen=!study.navOpen;renderStudy();
 function viewStudyDone(){
  const items=study.items;let gain=0,max=0,perfect=0;
  items.forEach((it,i)=>{const p=study.picked[i]||[];const r=scoreQ(it.q,p);gain+=r.gain;max+=r.max;if(r.gain===r.max)perfect++;});
- $app.innerHTML=header("本套背题完成")
+ $app.innerHTML=header(study.scope==="subj"?"本科目练习完成":"本套背题完成")
  +`<div class="card scorehero"><div class="num">${Math.round(gain/max*100)}</div><div class="lb">掌握度（满分100）</div>
    <div class="statgrid"><div class="stat"><div class="n">${perfect}/${items.length}</div><div class="t">一次答对</div></div>
    <div class="stat"><div class="n">${items.length-perfect}</div><div class="t">需复习</div></div>
    <div class="stat"><div class="n">${store.get(LS_W,[]).length}</div><div class="t">错题本</div></div></div></div>
-   <button class="btn btn-pri" onclick="viewHome()">返回首页</button>
-   <div style="height:10px"></div><button class="btn btn-ghost" onclick="restartStudy(${study.si})">重新刷本套（清空记录）</button>`;
+   <button class="btn btn-pri" onclick="viewStudyMap()">返回题目地图</button>
+   <div style="height:10px"></div><button class="btn btn-ghost" onclick="restartScope()">清空本科${study.scope==="subj"?"目":"套"}记录重做</button>`;
 }
 
 /* ---------------- 模拟考 ---------------- */
@@ -534,6 +612,7 @@ function viewAbout(){
 }
 function go(v){clearInterval(timerH);if(v==="examQuit"){quitExam();return;}
  if(v==="map"&&study){viewStudyMap();return;}
+ if(v==="subjects"){viewSubjects();return;}
  exam=null;viewHome();}
 
 /* ============ 评分细则 / 人文 覆盖层 ============ */
@@ -903,7 +982,8 @@ function fgCrown(post){
 
 viewHome();
 // 支持 #bur/#fm1/#fm2/#feq/#fhum 直达某一页（便于预览/书签）
-(function(){const h=(location.hash||"").slice(1);if(/^(fm1|fm2|fbur|fmem|feq|fhum|card|bur|mem|hum|eq)$/.test(h)){fgOpen(h);}})();
+(function(){const h=(location.hash||"").slice(1);if(/^(fm1|fm2|fbur|fmem|feq|fhum|card|bur|mem|hum|eq)$/.test(h)){fgOpen(h);}
+ if(h==='subjects')viewSubjects();})();
 </script>
 </body>
 </html>
