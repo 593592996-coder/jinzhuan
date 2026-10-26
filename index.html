@@ -349,6 +349,18 @@ function viewHome(){
   <div class="home-title">口腔医学技能赛项 · 备赛</div>
   <div class="home-sub">官方题库为主 · 薄弱点强化 · 学习数据可导出</div>
 
+  <div class="card" style="border:2px solid var(--warn);background:#fff9ef">
+    <div style="font-weight:800;font-size:15.5px;color:var(--ink);margin-bottom:8px">🎯 我的操作易错点 <span style="font-size:11.5px;font-weight:600;color:var(--warn)">每天练前 30 秒</span></div>
+    <div style="font-size:13.5px;line-height:1.9;color:var(--ink)">
+      <b>①</b> 开缝 <b>0°</b>：只打开邻接、把壁切直，聚合度留到精修一次加<br>
+      <b>②</b> 前牙远中：<b>先备近中</b>，以近中聚合度为参照备远中<br>
+      <b>③</b> 下 6 舌侧：<b>从舌尖/舌斜面开始</b>去倒凹，别只盯颈缘<br>
+      <b>④</b> 功能尖斜面别漏：下后牙＝颊尖、上后牙＝舌尖，30–40° 圆钝<br>
+      <b>⑤</b> 下椅位前五项：邻面→舌侧→颊侧→合面→功能尖斜面
+    </div>
+    <button class="btn btn-ghost" style="margin-top:10px;width:100%" onclick="fgOpen('fmyc')">看完整版 · 对策 / 检验 / 丢分点</button>
+  </div>
+
   <div class="card">
     <button class="bigbtn b1" onclick="viewSamples()">📄 官方题库练习<span class="d">模块四样题 8 题 · 模块五样题 4 题 · 数值与影像强化</span></button>
     <button class="bigbtn b3" onclick="startSamp(3)">📌 错题整理（22 题）<span class="d">官方平台错题 · 影像/病理/预防</span></button>
@@ -1048,6 +1060,7 @@ function fgEnsure(){
    <button class="fback" onclick="fgClose()">‹</button>
    <div class="ftt">技能评分 · 人文速查</div>
    <div class="ftabs">
+     <div class="ftab" data-fp="fmyc">我的易错点</div>
      <div class="ftab" data-fp="fm1">模块一 II类洞</div>
      <div class="ftab" data-fp="fm2">模块二 全瓷冠</div>
      <div class="ftab" data-fp="fbur">车针图册</div>
@@ -1057,6 +1070,38 @@ function fgEnsure(){
    </div>
  </div>
  <div class="fbody">
+
+  <!-- 我的易错点 -->
+  <div class="fpg" id="fmyc">
+   <div class="note" style="margin-bottom:12px">每天练之前过一遍：先记住<b>对策</b>，下椅位前按<b>检验</b>逐条核对。每条后面标了在赛项里对应哪个<b>丢分点</b>。来源＝本人实操复盘（口腔-修复 skill · 个人易错记录.md）。</div>
+   <div class="sec">
+     <h3>前牙 11 / 21 <span class="tg p">全瓷冠 · 练前必看</span></h3>
+     <div class="dg">
+      <div class="face">易错①</div><div><b>远中轴面聚合度容易做大</b>：备远中要把远中转到近中视线位，一换体位就失去参照。<br><span class="ok">对策：</span><b>先备近中</b>（每侧 2–5°），再以近中聚合度为参照备远中。<br><span class="bad">验：</span>切端垂直向下看，两轴壁近于平行；848 车身能同时贴住近中、远中两侧。<br><span class="bad">丢分：</span>人工「邻面切向聚合 2–5°」＋设备共同就位道。</div>
+      <div class="face">易错②</div><div><b>开缝时就把聚合度预支掉</b>：找邻接、够邻面时车针自然带角度，初预备已有角度、精修再加就叠加。<br><span class="ok">对策：</span>开缝 <b>0°</b>（平行就位道），只打开邻接、把壁切直；聚合度留到红标精修一次加。<br><span class="bad">验：</span>开缝完先「直」再「收」，每 1–2 针回切端看一眼。</div>
+     </div>
+   </div>
+   <div class="sec">
+     <h3>后牙 16 / 26 / 36 / 46 <span class="tg p">全瓷冠 · 练前必看</span></h3>
+     <div class="dg">
+      <div class="face">易错①</div><div><b>46 近中轴面聚合度容易做大</b>：病根同上——开缝带角度，精修又叠加。<br><span class="ok">对策：</span>开缝 0°（平行就位道）先切直；精修每侧加 2–4°、<b>一次加完</b>，加完立刻对照对侧。<br><span class="bad">验：</span>合面看两轴壁平行；探针贴壁两侧能同时贴住。<br><span class="bad">丢分：</span>人工「邻面聚合 2–5°」＋设备共同就位道。</div>
+      <div class="face">易错②</div><div><b>下 6（36/46）舌侧从舌尖起就是倒凹</b>：牙冠舌面天然内倾，倒凹不在颈部、在牙尖下面就开始了。<br><span class="ok">对策：</span><b>从舌尖/舌斜面开始</b>去倒凹，再沿舌轴壁收到颈缘；别只盯颈缘。<br><span class="bad">验：</span>沿就位道从合方向下滑探针，舌尖下方不能「钩住」。<br><span class="bad">丢分：</span>设备扫描「轴面无倒凹」。</div>
+      <div class="face">易错③</div><div><b>功能尖斜面整项漏掉</b>（所有牙）：备合面时注意力在定深/拉平，最容易整项跳过去。<br><span class="ok">对策：</span>下后牙＝<b>颊尖</b>、上后牙＝<b>舌尖</b>；功能尖 2.0mm 并做 30–40° 斜面、做圆钝；写进终检固定五项。<br><span class="bad">验：</span>邻面→舌侧→颊侧→合面→<b>功能尖斜面</b>逐项过。<br><span class="bad">丢分：</span>人工「功能尖 2.0mm 并做功能尖斜面」。</div>
+     </div>
+   </div>
+   <div class="sec">
+     <h3>通用 · 下椅位前清单 <span class="tg r">逐项打勾</span></h3>
+     <ul class="tight">
+      <li><b>1　邻面</b>：两条直线，聚合对称，无倒凹</li>
+      <li><b>2　舌/腭侧</b>：从牙尖起就无倒凹，轴壁平行就位道</li>
+      <li><b>3　颊侧</b>：轴向正确，无外展/倒凹</li>
+      <li><b>4　合面</b>：定深到位，功能尖 2.0、非功能尖 1.5</li>
+      <li><b>5　功能尖斜面</b>：下颌颊尖 / 上颌舌尖，30–40°、圆钝（最容易整项漏）</li>
+      <li><b>6　肩台</b>：0.8–1mm、连续、内缘圆钝无菲边</li>
+     </ul>
+   </div>
+   <div class="note">📌 完整复盘（现象/原因/检验）在「口腔-修复」skill 的 <b>个人易错记录.md</b>；新出现的问题先记那里，再同步到这里和开车听的第六段。</div>
+  </div>
 
   <!-- 模块一 -->
   <div class="fpg" id="fm1">
@@ -1195,21 +1240,8 @@ function fgEnsure(){
      <div class="note gold">📐 <b>通用硬指标：</b>肩台<b>0.8–1mm</b>　聚合<b>2–5°</b>　轴面无倒凹　颈缘连续无菲边。<br>最易混：前牙<b>唇侧龈下0.5mm</b> vs 后牙<b>全部齐龈</b>；前牙切端1.5–2.0 vs 后牙功能尖2.0/非功能尖1.5。</div>
    </div>
    <div class="sec">
-     <h3>🎯 我的易错点 <span class="tg p">本人复盘 · 考前必看</span></h3>
-     <div class="cr on" id="fant3">
-       <div class="dg">
-        <div class="face">易错①</div><div><b>11/21 远中轴面聚合度容易做大</b>：备远中要把远中转到近中视线位，一换体位就失去参照。<br><span class="ok">对策：</span><b>先备近中</b>（每侧 2–5°），再以近中聚合度为参照备远中。<br><span class="bad">验：</span>切端垂直向下看，两轴壁近于平行；848 车身能同时贴住近中、远中两侧。<br><span class="bad">丢分：</span>人工「邻面切向聚合 2–5°」＋设备共同就位道。</div>
-        <div class="face">易错②</div><div><b>开缝时就把聚合度预支掉</b>：找邻接、够邻面时车针自然带角度，初预备已有角度、精修再加就叠加。<br><span class="ok">对策：</span>开缝 <b>0°</b>（平行就位道），只打开邻接、把壁切直；聚合度留到红标精修一次加。<br><span class="bad">验：</span>开缝完先「直」再「收」，每 1–2 针回切端看一眼。</div>
-       </div>
-     </div>
-     <div class="cr" id="fpost3">
-       <div class="dg">
-        <div class="face">易错①</div><div><b>46 近中轴面聚合度容易做大</b>：病根同上——开缝带角度，精修又叠加。<br><span class="ok">对策：</span>开缝 0°（平行就位道）先切直；精修每侧加 2–4°、<b>一次加完</b>，加完立刻对照对侧。<br><span class="bad">验：</span>合面看两轴壁平行；探针贴壁两侧能同时贴住。<br><span class="bad">丢分：</span>人工「邻面聚合 2–5°」＋设备共同就位道。</div>
-        <div class="face">易错②</div><div><b>下 6（36/46）舌侧从舌尖起就是倒凹</b>：牙冠舌面天然内倾，倒凹不在颈部、在牙尖下面就开始了。<br><span class="ok">对策：</span><b>从舌尖/舌斜面开始</b>去倒凹，再沿舌轴壁收到颈缘；别只盯颈缘。<br><span class="bad">验：</span>沿就位道从合方向下滑探针，舌尖下方不能「钩住」。<br><span class="bad">丢分：</span>设备扫描「轴面无倒凹」。</div>
-        <div class="face">易错③</div><div><b>功能尖斜面整项漏掉</b>（所有牙）：备合面时注意力在定深/拉平，最容易整项跳过去。<br><span class="ok">对策：</span>下后牙＝<b>颊尖</b>、上后牙＝<b>舌尖</b>；功能尖 2.0mm 并做 30–40° 斜面、做圆钝；写进终检固定五项。<br><span class="bad">验：</span>邻面→舌侧→颊侧→合面→<b>功能尖斜面</b>逐项过。<br><span class="bad">丢分：</span>人工「功能尖 2.0mm 并做功能尖斜面」。</div>
-       </div>
-     </div>
-     <div class="note">📌 以上都来自本人实操复盘，完整版（现象/原因/检验）在「口腔-修复」skill 的 <b>个人易错记录.md</b>；以后新增问题先记那里，再同步到这里。</div>
+     <h3>🎯 我的易错点 <span class="tg p">完整版在首页</span></h3>
+     <div class="note">每天练前看首页顶部的「🎯 我的操作易错点」。本模块最该盯：<b>开缝 0°</b>；前牙远中<b>先备近中</b>作参照；下 6 舌侧<b>从舌尖起</b>去倒凹；<b>功能尖斜面</b>（下颊尖 / 上舌尖）别漏。</div>
    </div>
   </div>
 
