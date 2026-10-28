@@ -385,7 +385,7 @@ function viewHome(){
   </div>
 
   <div class="card">
-    <button class="bigbtn b3" onclick="fgOpen('card')">🦷 技能评分细则速记卡<span class="d">模块一 II类洞 · 模块二全瓷冠 · 车针图册 · Fair Grader</span></button>
+    <button class="bigbtn b3" onclick="fgOpen('card')">🦷 技能评分细则速记卡<span class="d">模块一 II类洞 · 模块二全瓷冠 · 模块三口扫 · 车针图册</span></button>
     <button class="bigbtn b4" onclick="fgOpen('fmem')">📌 易忘清单<span class="d">数值考点强化 · 消毒/药物浓度 · 记不住的点</span></button>
   </div>
 
@@ -1077,6 +1077,7 @@ function fgEnsure(){
      <div class="ftab" data-fp="fmyc">我的易错点</div>
      <div class="ftab" data-fp="fm1">模块一 II类洞</div>
      <div class="ftab" data-fp="fm2">模块二 全瓷冠</div>
+     <div class="ftab" data-fp="fm3">模块三 口扫</div>
      <div class="ftab" data-fp="fbur">车针图册</div>
      <div class="ftab" data-fp="fmem">易忘清单</div>
      <div class="ftab" data-fp="feq">设备说明</div>
@@ -1257,6 +1258,91 @@ function fgEnsure(){
      <h3>🎯 我的易错点 <span class="tg p">完整版在首页</span></h3>
      <div class="note">每天练前看首页顶部的「🎯 我的操作易错点」。本模块最该盯：<b>开缝 0°</b>；前牙远中<b>先备近中</b>作参照；下 6 舌侧<b>从舌尖起</b>去倒凹；<b>功能尖斜面</b>（下颊尖 / 上舌尖）别漏。</div>
    </div>
+  </div>
+
+  <!-- 模块三 口扫 -->
+  <div class="fpg" id="fm3">
+   <div class="bar">
+     <div class="sb pp"><b>4</b><span>术前<br>准备</span></div>
+     <div class="sb pp"><b>51</b><span>操作过程<br>裁判</span></div>
+     <div class="sb rr"><b>38</b><span>操作结果<br>时间·完整性</span></div>
+     <div class="sb dv"><b>7</b><span>术后·素养<br>赛后整理</span></div>
+   </div>
+   <div class="sec">
+     <h3>模块三 口内数字化印模 <span class="tg p">权重10% · 15分钟</span></h3>
+     <div class="flow"><span class="step">建单·填编号</span><span class="arr">→</span><span class="step">擦镜·预热10s</span><span class="arr">→</span><span class="step">三句沟通</span><span class="arr">→</span><span class="step">擦干牙列</span><span class="arr">→</span><span class="step">磨牙咬合面起手</span></div>
+     <div class="flow"><span class="step">咬合面→舌/腭→唇颊→咬合</span><span class="arr">→</span><span class="step">对颌</span><span class="arr">→</span><span class="step">咬合关系</span><span class="arr">→</span><span class="step">提交+U盘导出</span><span class="arr">→</span><span class="step">脱防护·分类·关机</span></div>
+     <div class="note">器械：先临 Aoralscan 3i Wireless；日进 D16HD-500H(GSF)-MF 模型 + A50 SET 预备体牙；NL-2000 头模。<b>目标 4′30″ 内提交</b>（<span class="num">&lt;5分钟＝15分</span>）。</div>
+   </div>
+
+   <div class="sec">
+     <h3>分步与分值 <span class="tg d">照着走不漏项</span></h3>
+     <table>
+      <thead><tr><th>步骤</th><th>要点</th><th>分</th></tr></thead>
+      <tbody>
+       <tr class="gp"><td colspan="2">术前准备</td><td class="pts">4</td></tr>
+       <tr><td>设备/器械</td><td>设备就绪+建订单、备齐工具并穿防护、核对模型就位及咬合正确，缺1项扣1</td><td class="pts">2</td></tr>
+       <tr><td>订单命名</td><td>患者姓名严格填<span class="bad">选手编号</span>，错则0</td><td class="pts">2</td></tr>
+       <tr class="gp"><td colspan="2">操作过程</td><td class="pts">51</td></tr>
+       <tr><td>握持</td><td>握笔式，枪尾朝屏幕，平稳不晃（方式错/晃动各扣1）</td><td class="pts">3</td></tr>
+       <tr><td>枪准备</td><td>镜头清洁 + <span class="num">预热10秒</span>；未清洁扣3、未预热扣2</td><td class="pts">3</td></tr>
+       <tr><td>沟通</td><td>充分交流 + 确认张口度 + 讲清配合事项，缺1项扣2</td><td class="pts">6</td></tr>
+       <tr><td>湿度</td><td>擦拭牙列，全程无唾液干扰</td><td class="pts">4</td></tr>
+       <tr><td>第一帧</td><td><span class="bad">必须磨牙咬合面</span>，错则0</td><td class="pts">5</td></tr>
+       <tr><td>扫描顺序</td><td>咬合面→舌/腭侧→唇颊侧→咬合，每错1步扣1.5</td><td class="pts">5</td></tr>
+       <tr><td>口镜</td><td>牵拉口唇及软组织扩视野，不用或不当0</td><td class="pts">5</td></tr>
+       <tr><td>连续性</td><td>标准顺序连续操作，中断1次扣2</td><td class="pts">5</td></tr>
+       <tr><td>画面干净</td><td>边缘清晰平滑、牙龈暴露<span class="num">0.5–1.0cm</span>、无手指/唇颊/过多上腭</td><td class="pts">6</td></tr>
+       <tr><td>操作要求</td><td>进口内才开扫、拿出前先暂停、结束提交订单，违1项扣3</td><td class="pts">6</td></tr>
+       <tr><td>扫描范围</td><td>工作颌 + 对颌 + 咬合关系，缺1项扣3</td><td class="pts">3</td></tr>
+       <tr class="gp"><td colspan="2">操作结果</td><td class="pts">38</td></tr>
+       <tr><td>时间</td><td>&lt;5′=15 ｜5–6′=12 ｜6–7′=9 ｜7–8′=6 ｜8–9′=3</td><td class="pts">15</td></tr>
+       <tr><td>完整性</td><td>牙面缺失每处扣2；牙龈缺失每处扣1；超范围干扰每处扣1；<span class="bad">咬合错误扣5</span></td><td class="pts">15</td></tr>
+       <tr><td>数据导出</td><td><span class="bad">U盘导出</span>，未导出或方式错0</td><td class="pts">8</td></tr>
+       <tr class="gp"><td colspan="2">术后 · 素养 · 整理</td><td class="pts">7</td></tr>
+       <tr><td>医疗废物</td><td>脱防护用品、分类投放，不规范0</td><td class="pts">2</td></tr>
+       <tr><td>职业素养</td><td>操作规范、态度严谨</td><td class="pts">2.5</td></tr>
+       <tr><td>赛后整理</td><td>关电源、清理操作区</td><td class="pts">2.5</td></tr>
+      </tbody>
+     </table>
+   </div>
+
+   <div class="sec">
+     <h3>沟通话术 <span class="tg p">6分</span></h3>
+     <div class="dg">
+      <div class="face">原话</div><div>「您好，我们现在给您做个口内扫描。请先把嘴张大我看一下张口度——过程中我会把镜头放进您嘴里，您舌头放平、别咬，有不舒服抬手示意就行。」</div>
+     </div>
+     <div class="note">一句话里三个评分点：交流、张口度、配合事项。说的时候手上要有动作配合，评委看过程分。</div>
+   </div>
+
+   <div class="sec">
+     <h3>咬合关系怎么扫 <span class="tg r">头模专用</span></h3>
+     <ul class="tight">
+      <li><b>头模不是「咬不起来」，是「不用咬」</b>：上下颌模型装在咬合架/头模上，本来就在正中咬合位，靠铰链限位，不用患者主动咬。</li>
+      <li><b>顺序</b>：先扫工作颌 → 再扫对颌 → 最后把下颌推回合位，扫<span class="ok">颊侧咬合记录</span>。</li>
+      <li><b>怎么扫</b>：软件里选「咬合 / 颊侧咬合」，镜头横跨上下颌合平面，一段要同时带上<span class="num">上下各2–3颗牙的颊面</span>，分右颊→前牙→左颊三段（至少左右两段）。</li>
+      <li><b>不能只扫合面</b>：只扫一颗牙或只扫到单颌，软件配不准 → 判「咬合错误」直接扣5。</li>
+      <li><b>别用手掰着模型扫</b>：手会挡视野、还会让模型移位；靠头模自身合位，另一只手用口镜牵拉。</li>
+      <li><b>术前那2分就在这</b>：先确认模型完全就位、咬合无间隙；合不上＝模型没按到位，先按好，必要时报告裁判。</li>
+     </ul>
+   </div>
+
+   <div class="sec">
+     <h3>最容易丢的分 <span class="tg d">按分值×易错度</span></h3>
+     <table>
+      <thead><tr><th>失分点</th><th>丢分</th></tr></thead>
+      <tbody>
+       <tr><td>扫描超5分钟</td><td class="pts">3–12</td></tr>
+       <tr><td>忘记U盘导出</td><td class="pts">8</td></tr>
+       <tr><td>沟通三句没说完</td><td class="pts">最多6</td></tr>
+       <tr><td>第一帧选错牙位</td><td class="pts">5</td></tr>
+       <tr><td>咬合关系扫错/没扫</td><td class="pts">5</td></tr>
+       <tr><td>口镜没用</td><td class="pts">5</td></tr>
+      </tbody>
+     </table>
+   </div>
+
+   <div class="note gold">⚠️ 规程自相矛盾三处：①「扫描时间 7–8分钟」正文写16分、评分表写6分——按递减规律应为<b>6分</b>；②牙龈暴露范围正文写1–1.5cm、评分表写<b>0.5–1.0cm</b>，按评分表练；③正文「可暴露1–1.5cm」与完整性条款口径不一。赛前找赛项组确认。</div>
   </div>
 
   <!-- 车针图册 -->
