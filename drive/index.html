@@ -144,7 +144,7 @@
     <p><b>建议：</b>每次听一段，循环 2～3 遍；重点会自动念第二遍，第二遍跟读加深印象。</p>
   </details>
 
-  <div class="foot">4 段 · 按易忘清单卡片 · 讲解式 · 重点重复两遍<br>普通话 / 台湾双版本</div>
+  <div class="foot">12 段 · 覆盖易忘清单全部考点 · 重点重复两遍<br>普通话 / 台湾双版本</div>
 </div>
 
 <audio id="audio" preload="metadata"></audio>
@@ -152,9 +152,17 @@
 <script>
 const TRACKS = [
   {id:1, title:"Kennedy 分类及亚类", sub:"四大主类 · 亚类 · Applegate 八法则 · Cummer", cn:"audio/t1_cn.m4a", tw:"audio/t1_tw.m4a", dur:{cn:256, tw:245}},
-  {id:2, title:"间接固位体", sub:"支点线 · 抗旋转 · 常见形式 · 设计七要点", cn:"audio/t2_cn.m4a", tw:"audio/t2_tw.m4a", dur:{cn:279, tw:265}},
-  {id:3, title:"消毒与浓度（上）", sub:"含漱液 · 皮肤黏膜 · 环境物表", cn:"audio/t3_cn.m4a", tw:"audio/t3_tw.m4a", dur:{cn:307, tw:295}},
-  {id:4, title:"浓度与极量（下）", sub:"局麻极量 · 牙体修复 · 用氟 · 口诀", cn:"audio/t4_cn.m4a", tw:"audio/t4_tw.m4a", dur:{cn:394, tw:373}}
+  {id:2, title:"间接固位体", sub:"支点线 · 抗旋转 · 形式 · 设计七要点", cn:"audio/t2_cn.m4a", tw:"audio/t2_tw.m4a", dur:{cn:279, tw:265}},
+  {id:3, title:"修复数值考点", sub:"45° · 聚合度 · 肩台 · 颌面磨除", cn:"audio/t5_cn.m4a", tw:"audio/t5_tw.m4a", dur:{cn:65, tw:63}},
+  {id:4, title:"牙体牙髓数值", sub:"鸠尾峡 · 洞深 · 根管长度 · 酸蚀", cn:"audio/t6_cn.m4a", tw:"audio/t6_tw.m4a", dur:{cn:69, tw:67}},
+  {id:5, title:"组织病理", sub:"釉质厚度 · 生长线 · 菌斑致龋", cn:"audio/t7_cn.m4a", tw:"audio/t7_tw.m4a", dur:{cn:130, tw:123}},
+  {id:6, title:"牙周病学", sub:"牙周数字 · 早期牙周炎影像", cn:"audio/t8_cn.m4a", tw:"audio/t8_tw.m4a", dur:{cn:158, tw:152}},
+  {id:7, title:"颌面影像（上）", sub:"全口牙片 · 投照角度 · 水平移位法", cn:"audio/t9_cn.m4a", tw:"audio/t9_tw.m4a", dur:{cn:187, tw:176}},
+  {id:8, title:"颌面影像（下）", sub:"失真 · 六部分 · 上下颌磨牙 · 髁突", cn:"audio/t10_cn.m4a", tw:"audio/t10_tw.m4a", dur:{cn:255, tw:241}},
+  {id:9, title:"消毒与浓度（上）", sub:"含漱液 · 皮肤黏膜 · 环境物表", cn:"audio/t3_cn.m4a", tw:"audio/t3_tw.m4a", dur:{cn:307, tw:295}},
+  {id:10, title:"浓度与极量（下）", sub:"局麻极量 · 牙体修复 · 用氟 · 口诀", cn:"audio/t4_cn.m4a", tw:"audio/t4_tw.m4a", dur:{cn:396, tw:374}},
+  {id:11, title:"口腔预防医学", sub:"基本要素 · 三级预防", cn:"audio/t11_cn.m4a", tw:"audio/t11_tw.m4a", dur:{cn:106, tw:101}},
+  {id:12, title:"口诀汇总", sub:"数值与影像全科串记", cn:"audio/t12_cn.m4a", tw:"audio/t12_tw.m4a", dur:{cn:108, tw:103}}
 ];
 
 const LS_KEY = "jz_audio_app_v1";

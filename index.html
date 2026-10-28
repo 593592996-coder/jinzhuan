@@ -229,10 +229,14 @@ a{color:var(--blue)}
 #fg .mpv{margin-left:auto;border:1px solid #2c3852;background:#202a3f;color:#9fb0c8;border-radius:99px;padding:6px 11px;font-size:12px;font-weight:700;font-family:inherit}
 #fg .mpv.on{color:#f5b942;border-color:#f5b942}
 #fg .mptime{font-size:11.5px;color:#9fb0c8;font-variant-numeric:tabular-nums;min-width:66px;text-align:right}
-#fg .memchips{display:flex;gap:6px;flex-wrap:wrap;flex:1 1 100%;order:4}
-#fg .memchip{border:1px solid #2c3852;background:#202a3f;color:#9fb0c8;border-radius:99px;padding:7px 10px;font-size:12px;font-weight:600;font-family:inherit}
-#fg .memchip.on{background:#4f9cff;border-color:#4f9cff;color:#fff}
+#fg .mpsel{flex:1 1 150px;min-width:0;border:1px solid #2c3852;background:#202a3f;color:#e8edf6;border-radius:10px;padding:9px 8px;font-size:12.5px;font-weight:600;font-family:inherit;appearance:none;-webkit-appearance:none}
 #fg .mphint{flex:1 1 100%;order:5;font-size:11px;color:#9fb0c8;margin-top:-1px}
+#fg .rd{float:right;margin:0 0 0 8px;width:26px;height:26px;border-radius:50%;border:1px solid #2c3852;background:#202a3f;color:#9fb0c8;font-size:13px;line-height:1;display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
+#fg .rd.on{background:#f5b942;border-color:#f5b942;color:#1a2233}
+#fg .rd:active{transform:scale(.94)}
+#fg .memcard td .rd{float:none;margin-left:6px;vertical-align:middle}
+#fg .rd-hl{outline:2px solid rgba(245,185,66,.55);outline-offset:2px;border-radius:8px}
+#fg tr.rd-hl td{background:rgba(245,185,66,.10)}
 </style>
 </head>
 <body>
@@ -1337,15 +1341,23 @@ function fgEnsure(){
   <div class="fpg" id="fmem">
    <div class="memplay">
     <button class="mpbtn" id="memPlayBtn" onclick="memToggle()">▶ 朗读</button>
+    <select class="mpsel" id="memSel" onchange="memPick(+this.value)">
+     <option value="0">01 Kennedy 分类</option>
+     <option value="1">02 间接固位体</option>
+     <option value="2">03 修复数值考点</option>
+     <option value="3">04 牙体牙髓数值</option>
+     <option value="4">05 组织病理</option>
+     <option value="5">06 牙周病学</option>
+     <option value="6">07 颌面影像（上）</option>
+     <option value="7">08 颌面影像（下）</option>
+     <option value="8">09 消毒与浓度（上）</option>
+     <option value="9">10 浓度与极量（下）</option>
+     <option value="10">11 口腔预防医学</option>
+     <option value="11">12 口诀汇总</option>
+    </select>
     <button class="mpv" id="memVoiceBtn" onclick="memVoiceToggle()">普通话</button>
     <span class="mptime" id="memTime">0:00 / 0:00</span>
-    <div class="memchips">
-     <button class="memchip on" onclick="memPick(0)">1 Kennedy</button>
-     <button class="memchip" onclick="memPick(1)">2 间接固位体</button>
-     <button class="memchip" onclick="memPick(2)">3 消毒浓度·上</button>
-     <button class="memchip" onclick="memPick(3)">4 浓度极量·下</button>
-    </div>
-    <div class="mphint">语音版 4 段 · 点段落名切换 · 听完自动连播下一段</div>
+    <div class="mphint">12 段覆盖全部考点 · 每点右侧 🔊 单独朗读 · 顶部播放器整段连听</div>
     <audio id="memA" preload="none"></audio>
    </div>
    <div id="fmemBody"></div>
@@ -1461,14 +1473,15 @@ function fgEnsure(){
    });
 
    box.innerHTML=h;
+   rdDecorate(box);
    memBind();
  }catch(e){console.warn("MEM render",e);}})();
  d.querySelectorAll(".ftab").forEach(t=>t.onclick=()=>fgTab(t.dataset.fp));
 }
 function fgOpen(p){fgEnsure();const alias={card:"fm1",bur:"fbur",hum:"fhum",eq:"feq"};p=alias[p]||p;const fg=document.getElementById("fg");fg.classList.add("on");fgTab(p);}
-function fgClose(){memPause();document.getElementById("fg").classList.remove("on");}
+function fgClose(){memPause();rdStop();document.getElementById("fg").classList.remove("on");}
 function fgTab(p){
- if(p!=="fmem")memPause();
+ if(p!=="fmem"){memPause();rdStop();}
  document.querySelectorAll("#fg .ftab").forEach(t=>t.classList.toggle("on",t.dataset.fp===p));
  document.querySelectorAll("#fg .fpg").forEach(g=>g.classList.toggle("on",g.id===p));
  document.getElementById("fg").scrollTop=0;
@@ -1485,8 +1498,16 @@ function fgCrown(post){
 const MEM_AUDIO=[
  {cn:"drive/audio/t1_cn.m4a",tw:"drive/audio/t1_tw.m4a"},
  {cn:"drive/audio/t2_cn.m4a",tw:"drive/audio/t2_tw.m4a"},
+ {cn:"drive/audio/t5_cn.m4a",tw:"drive/audio/t5_tw.m4a"},
+ {cn:"drive/audio/t6_cn.m4a",tw:"drive/audio/t6_tw.m4a"},
+ {cn:"drive/audio/t7_cn.m4a",tw:"drive/audio/t7_tw.m4a"},
+ {cn:"drive/audio/t8_cn.m4a",tw:"drive/audio/t8_tw.m4a"},
+ {cn:"drive/audio/t9_cn.m4a",tw:"drive/audio/t9_tw.m4a"},
+ {cn:"drive/audio/t10_cn.m4a",tw:"drive/audio/t10_tw.m4a"},
  {cn:"drive/audio/t3_cn.m4a",tw:"drive/audio/t3_tw.m4a"},
- {cn:"drive/audio/t4_cn.m4a",tw:"drive/audio/t4_tw.m4a"}
+ {cn:"drive/audio/t4_cn.m4a",tw:"drive/audio/t4_tw.m4a"},
+ {cn:"drive/audio/t11_cn.m4a",tw:"drive/audio/t11_tw.m4a"},
+ {cn:"drive/audio/t12_cn.m4a",tw:"drive/audio/t12_tw.m4a"}
 ];
 let memI=0,memV="cn",memBound=false;
 function memA(){return document.getElementById("memA");}
@@ -1495,7 +1516,7 @@ function memUI(){
  const a=memA();if(!a)return;
  const b=document.getElementById("memPlayBtn");
  if(b)b.textContent=(a.src&&!a.paused&&!a.ended)?"⏸ 暂停":"▶ 朗读";
- document.querySelectorAll("#fmem .memchip").forEach((x,i)=>x.classList.toggle("on",i===memI));
+ const sel=document.getElementById("memSel");if(sel)sel.value=String(memI);
  const vb=document.getElementById("memVoiceBtn");
  if(vb){vb.textContent=memV==="cn"?"普通话":"台湾腔";vb.classList.toggle("on",memV==="tw");}
  const tm=document.getElementById("memTime");
@@ -1503,11 +1524,12 @@ function memUI(){
 }
 function memLoad(play){
  const a=memA();if(!a)return;
+ if(play)rdStop();
  a.src=memV==="cn"?MEM_AUDIO[memI].cn:MEM_AUDIO[memI].tw;
  a.load();memUI();
  if(play){const p=a.play();if(p&&p.catch)p.catch(()=>{});}
 }
-function memPick(i){memI=i;memLoad(true);}
+function memPick(i){i=+i;if(!(i>=0&&i<MEM_AUDIO.length))return;memI=i;memLoad(true);}
 function memToggle(){
  const a=memA();if(!a)return;
  if(!a.src){memLoad(true);return;}
@@ -1527,6 +1549,79 @@ function memBind(){
  a.addEventListener("timeupdate",memUI);
  a.addEventListener("ended",memNext);
  memUI();
+}
+
+/* ===== 每点朗读（系统语音） ===== */
+let rdActive=null,rdToken=0;
+function rdVoice(){
+ try{
+  const vs=speechSynthesis.getVoices()||[];
+  return vs.find(v=>/^zh[-_]CN/i.test(v.lang)&&/Ting|婷婷/i.test(v.name))||
+         vs.find(v=>/^zh[-_]CN/i.test(v.lang))||
+         vs.find(v=>/^zh/i.test(v.lang))||null;
+ }catch(e){return null;}
+}
+function rdText(el){
+ const c=el.cloneNode(true);c.querySelectorAll(".rd").forEach(x=>x.remove());
+ if(el.tagName==="TR"){
+  return Array.from(c.children).map(x=>(x.textContent||"").replace(/\s+/g," ").trim()).filter(Boolean).join("，");
+ }
+ return (c.textContent||"").replace(/\s+/g," ").trim();
+}
+function rdSplit(t){
+ const out=[];let buf="";
+ for(const ch of t){
+  buf+=ch;
+  if(/[。！？；!?;]$/.test(ch)&&buf.length>=24){out.push(buf.trim());buf="";}
+  else if(buf.length>=120){out.push(buf.trim());buf="";}
+ }
+ if(buf.trim())out.push(buf.trim());
+ return out;
+}
+function rdReset(){
+ if(!rdActive)return;
+ rdActive.el.classList.remove("rd-hl");
+ rdActive.btn.classList.remove("on");
+ rdActive.btn.textContent="🔊";
+ rdActive=null;
+}
+function rdStop(){
+ rdToken++;
+ try{if("speechSynthesis" in window)speechSynthesis.cancel();}catch(e){}
+ rdReset();
+}
+function rdSpeak(el,btn){
+ if(!("speechSynthesis" in window)){alert("当前浏览器不支持语音朗读，请用最新版 Safari 或 Chrome");return;}
+ rdStop();
+ const text=rdText(el);if(!text)return;
+ memPause();
+ const my=++rdToken,chunks=rdSplit(text),v=rdVoice();
+ rdActive={el,btn};el.classList.add("rd-hl");btn.classList.add("on");btn.textContent="⏸";
+ chunks.forEach((c,i)=>{
+  const u=new SpeechSynthesisUtterance(c);
+  u.lang="zh-CN";u.rate=0.95;if(v)u.voice=v;
+  if(i===chunks.length-1)u.onend=()=>{if(my===rdToken)rdReset();};
+  u.onerror=()=>{if(my===rdToken)rdReset();};
+  speechSynthesis.speak(u);
+ });
+}
+function rdToggle(el,btn){
+ if(rdActive&&rdActive.el===el){rdStop();return;}
+ rdSpeak(el,btn);
+}
+function rdDecorate(root){
+ root.querySelectorAll("li,p,.memquote,tr").forEach(el=>{
+  if(el.querySelector(".rd"))return;
+  if(el.tagName==="P"&&el.closest("li"))return;
+  if(el.tagName==="TR"&&el.querySelector("th"))return;
+  if(!(el.textContent||"").replace(/[\s\-—]/g,""))return;
+  const b=document.createElement("button");
+  b.type="button";b.className="rd";b.textContent="🔊";b.setAttribute("aria-label","朗读这一点");
+  b.onclick=function(e){e.preventDefault();e.stopPropagation();rdToggle(el,b);};
+  if(el.tagName==="TR"){
+   const last=el.lastElementChild||el;last.appendChild(b);
+  }else{el.appendChild(b);}
+ });
 }
 
 viewHome();
