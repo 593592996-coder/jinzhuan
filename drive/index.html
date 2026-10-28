@@ -109,7 +109,7 @@
 
   <div class="player">
     <div class="now-label">正在播放</div>
-    <h1 class="now-title" id="nowTitle">修复与牙体牙髓</h1>
+    <h1 class="now-title" id="nowTitle">Kennedy 分类及亚类</h1>
     <div class="now-sub" id="nowSub"></div>
 
     <input class="progress" id="progress" type="range" min="0" max="1000" value="0" step="1">
@@ -141,22 +141,20 @@
     <p><b>手机：</b>浏览器打开 <b>https://593592996-coder.github.io/jinzhuan/drive/</b> 即可在线播放；也可把整个文件夹放进 Documents by Readdle 离线听。</p>
     <p><b>Mac：</b>直接双击 index.html，用 Safari 打开。</p>
     <p><b>开车：</b>上车前设好音量、声音、速度；行驶中不要操作手机，用方向盘/车机下一首键即可。</p>
-    <p><b>建议：</b>每次听一段，循环 2～3 遍；听到问题先心里答，再听答案。</p>
+    <p><b>建议：</b>每次听一段，循环 2～3 遍；重点会自动念第二遍，第二遍跟读加深印象。</p>
   </details>
 
-  <div class="foot">6 段 · 问答式 · 普通话 / 台湾双版本<br>数值以教材为准</div>
+  <div class="foot">4 段 · 按易忘清单卡片 · 讲解式 · 重点重复两遍<br>普通话 / 台湾双版本</div>
 </div>
 
 <audio id="audio" preload="metadata"></audio>
 
 <script>
 const TRACKS = [
-  {id:1, title:"修复与牙体牙髓", sub:"45° · 聚合度 2–5° · 肩台 · 鸠尾峡 · 根管长度", cn:"audio/t1_cn.m4a", tw:"audio/t1_tw.m4a", dur:{cn:134, tw:130}},
-  {id:2, title:"牙周与口腔影像", sub:"牙周数字 · 全口牙片 · 投照角度 · 水平移位法", cn:"audio/t2_cn.m4a", tw:"audio/t2_tw.m4a", dur:{cn:275, tw:261}},
-  {id:3, title:"用药、感控与口诀", sub:"氯己定 · 碘伏 · 含氯 · 局麻极量 · 口诀", cn:"audio/t3_cn.m4a", tw:"audio/t3_tw.m4a", dur:{cn:164, tw:158}},
-  {id:4, title:"错题 12 道", sub:"官方平台错题，逐题问答", cn:"audio/t4_cn.m4a", tw:"audio/t4_tw.m4a", dur:{cn:223, tw:212}},
-  {id:5, title:"组织病理与预防", sub:"釉质厚度 · 生长线 · 菌斑致龋 · 三级预防", cn:"audio/t5_cn.m4a", tw:"audio/t5_tw.m4a", dur:{cn:198, tw:189}},
-  {id:6, title:"我的备牙易错点", sub:"开缝0° · 远中先近中 · 下6舌侧倒凹 · 功能尖斜面", cn:"audio/t6_cn.m4a", tw:"audio/t6_tw.m4a", dur:{cn:168, tw:161}}
+  {id:1, title:"Kennedy 分类及亚类", sub:"四大主类 · 亚类 · Applegate 八法则 · Cummer", cn:"audio/t1_cn.m4a", tw:"audio/t1_tw.m4a", dur:{cn:256, tw:245}},
+  {id:2, title:"间接固位体", sub:"支点线 · 抗旋转 · 常见形式 · 设计七要点", cn:"audio/t2_cn.m4a", tw:"audio/t2_tw.m4a", dur:{cn:279, tw:265}},
+  {id:3, title:"消毒与浓度（上）", sub:"含漱液 · 皮肤黏膜 · 环境物表", cn:"audio/t3_cn.m4a", tw:"audio/t3_tw.m4a", dur:{cn:307, tw:295}},
+  {id:4, title:"浓度与极量（下）", sub:"局麻极量 · 牙体修复 · 用氟 · 口诀", cn:"audio/t4_cn.m4a", tw:"audio/t4_tw.m4a", dur:{cn:394, tw:373}}
 ];
 
 const LS_KEY = "jz_audio_app_v1";
