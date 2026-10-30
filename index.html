@@ -1469,7 +1469,7 @@ function fgEnsure(){
      <option value="11">12 口腔预防医学</option>
      <option value="12">13 口诀汇总</option>
     </select>
-    <button class="mpv" id="memVoiceBtn" onclick="memVoiceToggle()">普通话</button>
+    <button class="mpv" id="memVoiceBtn" onclick="memVoiceToggle()">曉臻</button>
     <span class="mptime" id="memTime">0:00 / 0:00</span>
     <div class="mphint">13 段覆盖全部考点 · 每点右侧 🔊 单独朗读 · 顶部播放器整段连听</div>
     <audio id="memA" preload="none"></audio>
@@ -1624,7 +1624,7 @@ const MEM_AUDIO=[
  {cn:"audio/t11_cn.m4a",tw:"audio/t11_tw.m4a"},
  {cn:"audio/t12_cn.m4a",tw:"audio/t12_tw.m4a"}
 ];
-let memI=0,memV="cn",memBound=false;
+let memI=0,memV="tw",memBound=false;
 function memA(){return document.getElementById("memA");}
 function memFmt(s){s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0");}
 function memUI(){
@@ -1633,7 +1633,7 @@ function memUI(){
  if(b)b.textContent=(a.src&&!a.paused&&!a.ended)?"⏸ 暂停":"▶ 朗读";
  const sel=document.getElementById("memSel");if(sel)sel.value=String(memI);
  const vb=document.getElementById("memVoiceBtn");
- if(vb){vb.textContent=memV==="cn"?"普通话":"台湾腔";vb.classList.toggle("on",memV==="tw");}
+ if(vb){vb.textContent=memV==="cn"?"普通话":"曉臻";vb.classList.toggle("on",memV==="tw");}
  const tm=document.getElementById("memTime");
  if(tm)tm.textContent=a.src?(memFmt(a.currentTime)+" / "+memFmt(a.duration)):"0:00 / 0:00";
 }
@@ -1671,7 +1671,8 @@ let rdActive=null,rdToken=0;
 function rdVoice(){
  try{
   const vs=speechSynthesis.getVoices()||[];
-  return vs.find(v=>/^zh[-_]CN/i.test(v.lang)&&/Ting|婷婷/i.test(v.name))||
+  return vs.find(v=>/^zh[-_]TW/i.test(v.lang))||
+         vs.find(v=>/^zh[-_]CN/i.test(v.lang)&&/Ting|婷婷/i.test(v.name))||
          vs.find(v=>/^zh[-_]CN/i.test(v.lang))||
          vs.find(v=>/^zh/i.test(v.lang))||null;
  }catch(e){return null;}
@@ -1714,7 +1715,7 @@ function rdSpeak(el,btn){
  rdActive={el,btn};el.classList.add("rd-hl");btn.classList.add("on");btn.textContent="⏸";
  chunks.forEach((c,i)=>{
   const u=new SpeechSynthesisUtterance(c);
-  u.lang="zh-CN";u.rate=0.95;if(v)u.voice=v;
+  u.lang="zh-TW";u.rate=0.95;if(v)u.voice=v;
   if(i===chunks.length-1)u.onend=()=>{if(my===rdToken)rdReset();};
   u.onerror=()=>{if(my===rdToken)rdReset();};
   speechSynthesis.speak(u);
